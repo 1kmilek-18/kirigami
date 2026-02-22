@@ -1,0 +1,45 @@
+# Kirigami 画像→PPTX 変換ツール 設定
+# API キーは .env および環境変数のみで指定すること（このファイルには書かない）
+
+# ディレクトリ（相対パスはプロジェクトルート基準）
+paths:
+  input_dir: input
+  output_dir: output
+  temp_dir: temp
+
+# レイヤー分解 (Req: 2.4, 2.5)
+decompose:
+  backend: api          # api | cpu
+  num_layers: 4         # 3–10
+
+# 画像前処理
+image:
+  max_resolution: 640   # リサイズ時の最大辺（ピクセル）
+  pdf_dpi: 120          # PDF→画像の解像度（72–300）。低いほど高速、高めで画質優先
+
+# OCR (Req: 3.1–3.5)
+ocr:
+  method: vision        # vision=Gemini API（.env の GEMINI_API_KEY を参照）| paddle=ローカル
+  lang: japan           # 日本語メイン
+
+# モデル ID（Vision OCR / LLM 補正で使用）
+models:
+  gemini: gemini-3-pro-preview   # Vision API および LLM 補正（google）
+  anthropic: claude-sonnet-4-6  # LLM 補正（Claude 4.6 Sonnet）
+
+# テキスト補正 LLM (Req: 4.1–4.2)
+llm_correction:
+  enabled: true
+  # 利用順（先頭から試し、利用可能なもので実行）
+  provider_fallback:
+    - anthropic
+    - google
+    - ollama
+
+# 出力 PPTX (Req: 5.4–5.6)
+output:
+  slide_width_inches: 13.333   # 16:9 相当
+  slide_height_inches: 7.5
+
+# 一時ファイル (Req: 7.4)
+clean_temp: true
